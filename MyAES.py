@@ -74,17 +74,10 @@ def CTR_decode(cipherText):
     plainText = b''
     iv = cipherText[0:16]
     counter = int.from_bytes(iv, 'big')
-    print("counter = {}".format(counter))
     for b in range(blocks):
         blockText = cipherText[16*(b+1):16*(b+2)]
-        print("blockText = {}".format(blockText))
         f_counter = CBC_encode_block(counter.to_bytes(16, byteorder='big'))
-        print("f_counter = {}".format(f_counter))
         xorText = bxor(blockText, f_counter)
-        print("xorText = {}".format(xorText))
         counter = counter + 1
-        print("counter = {}".format(counter))
-        plainText += xorText
-        print("plainText = {}".format(plainText))
-    print("plainText = {}".format(plainText))
-    return unpad(plainText)
+        plainText = plainText + xorText
+    return plainText
